@@ -36,7 +36,7 @@ while True:
     # Only process every other frame of video to save time
     if process_this_frame:
         # Resize frame of video to 1/4 size for faster face recognition processing
-        small_frame = cv2.resize(frame, (0, 0), fx=0.5, fy=0.5)
+        small_frame = cv2.resize(frame, (0, 0), fx=1, fy=1)
 
         # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
         rgb_small_frame = color_image_rgb = cv2.cvtColor(small_frame, cv2.COLOR_BGR2RGB)
@@ -70,10 +70,10 @@ while True:
     # Display the results
     for (top, right, bottom, left), name in zip(face_locations, face_names):
         # Scale back up face locations since the frame we detected in was scaled to 1/4 size
-        top *= 2
-        right *= 2
-        bottom *= 2
-        left *= 2
+        # top *= 2
+        # right *= 2
+        # bottom *= 2
+        # left *= 2
         face_image = frame[top:bottom, left:right]
 
         pil_image = Image.fromarray(face_image)
@@ -84,14 +84,14 @@ while True:
             files = {'file': file.read()}
             data = {'filename': 'test.jpg'}
             headers = {'Authorization': '1234'}
-            test = requests.post('https://d103-109-252-24-95.eu.ngrok.io/api/exit_person', files=files, data=data, headers=headers)
+            test = requests.post('http://31.129.102.179/api/exit_person', files=files, data=data, headers=headers)
         try:
             test.raise_for_status()
             name = test.json()['name']
         except requests.exceptions.HTTPError:
             name = 'Unknown@'
         os.remove('test1.jpg')
-        # Draw a box around the face
+        # # Draw a box around the face
         cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
 
         # Draw a label with a name below the face
